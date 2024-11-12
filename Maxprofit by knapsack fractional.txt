@@ -1,0 +1,36 @@
+class Item:
+    def __init__(self, weight, profit):
+        self.weight = weight
+        self.profit = profit
+
+def compare(item):
+    return item.profit / item.weight
+
+def knapsack(items, cap):
+    currweight = 0
+    maxprofit = 0
+
+    # Sort items by their value-to-weight ratio in descending order
+    items.sort(key=compare, reverse=True)
+
+    for item in items:
+        if currweight + item.weight <= cap:
+            currweight += item.weight
+            maxprofit += item.profit
+            print(f"Taken weight = {item.weight}, Max profit = {maxprofit}")
+        else:
+            remain = cap - currweight
+            fweight = remain / item.weight
+            maxprofit += item.profit * fweight
+            currweight += remain  # Add the remaining weight taken
+            print(f"Taken weight = {remain}, Max profit = {maxprofit}")
+            break
+
+    return maxprofit, currweight
+
+# Test the knapsack function
+items = [Item(5, 12), Item(10, 25), Item(7, 19), Item(12, 13)]
+cap = 18
+
+maxprofit, total_weight_taken = knapsack(items, cap)
+print(f"Max profit = {maxprofit:.2f}, Total weight taken = {total_weight_taken}")
